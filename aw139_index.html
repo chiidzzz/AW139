@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AW139 Helicopter Tools</title>
+  <link rel="stylesheet" href="aw139_styles.css" />
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="aw139_app.js" defer></script>
+</head>
+
+<body>
+  <div id="app">
+    <!-- HOME PAGE -->
+    <div v-show="currentPage === 'Home'" class="home-page">
+      <header class="home-header">
+        <div class="logo-container">
+          <img class="hero-img" src="139.jpeg" alt="AW139 helicopter" />
+          <h1>Agusta Westland 139</h1>
+        </div>
+      </header>
+
+      <div class="tool-grid">
+        <div class="tool-card" @click="navigateTo('Power')">
+          <div class="tool-icon">⚡</div>
+          <h3>Power Assurance</h3>
+          <p>Calculate power parameters and limits</p>
+        </div>
+
+        <div class="tool-card" @click="navigateTo('Converter')">
+          <div class="tool-icon">🔄</div>
+          <h3>Pressure Converter</h3>
+          <p>Convert between pressure units</p>
+        </div>
+
+        <div class="tool-card" @click="navigateTo('CAT_A')">
+          <div class="tool-icon">📈</div>
+          <h3>CAT A</h3>
+          <p>Category A performance (Coming Soon)</p>
+        </div>
+
+        <div class="tool-card" @click="navigateTo('Limitations')">
+          <div class="tool-icon">📋</div>
+          <h3>Limitations</h3>
+          <p>Operational limits (Coming Soon)</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- POWER TAB -->
+    <div v-show="currentPage === 'Power'" class="page-content">
+      <div class="page-header">
+        <button class="back-button" @click="goHome()">← Back to Home</button>
+        <h2>AW139 – Power Assurance</h2>
+      </div>
+
+      <div class="stack-vertical">
+        <div class="card">
+          <h3 class="h3">Inputs</h3>
+          <div class="stack">
+            <div class="row"> <label>QNH:</label> <input type="number" v-model.number="qnh" step="0.01"
+                @input="recalc()" /> <select v-model="qnhUnit" @change="recalc()">
+                <option value="inHg">in. Hg</option>
+                <option value="hPa">hPa</option>
+              </select> </div>
+            <div class="row"> <label>FAT (°C):</label> <input type="number" v-model.number="fat" min="-10" max="50"
+                step="1" placeholder="-" @input="recalc()" /> </div>
+            <div class="row"> <label>Indicated Altitude (ft):</label> <input type="number"
+                v-model.number="indicatedAltitude" min="0" max="14000" step="1" @input="recalc()" /> </div>
+            <div class="row"> <label>Engine Torque (%):</label> <input type="number" v-model.number="engineTorque"
+                min="90" max="105" step="0.1" placeholder="-" @input="recalc()" /> </div>
+            <div v-if="inputError" class="error">{{ inputError }}</div>
+          </div>
+        </div>
+        <div class="card results-card">
+          <h3 class="h3">Results</h3>
+          <div class="result-lg">
+            <div class="r-label">Pressure Altitude (ft)</div>
+            <div class="r-value">{{ fmt(pressureAltitude) }}</div>
+          </div>
+          <div class="result-lg">
+            <div class="r-label">Density Altitude (ft)</div>
+            <div class="r-value">{{ densityAltitude!==null ? fmt(densityAltitude) : '—' }}</div>
+          </div>
+          <div class="result-lg">
+            <div class="r-label">Max allowable ITT (°C)</div>
+            <div class="r-value">{{ showOrNA1(maxAllowableITT) }}</div>
+          </div>
+          <div class="result-lg">
+            <div class="r-label">Max allowable Ng (%)</div>
+            <div class="r-value">{{ showOrNA1(maxAllowableNg) }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pressure CONVERTER TAB -->
+    <div v-show="currentPage === 'Converter'" class="page-content">
+      <div class="page-header">
+        <button class="back-button" @click="goHome()">← Back to Home</button>
+        <h2>Pressure Unit Converter</h2>
+      </div>
+
+      <div class="card">
+        <div class="stack">
+          <div class="row">
+            <label>From:</label>
+            <select v-model="pressureUnitFrom" @change="updateConversionUnits()">
+              <option value="hPa">hPa</option>
+              <option value="inHg">in. Hg</option>
+            </select>
+          </div>
+
+          <div class="row">
+            <label>To:</label>
+            <p class="to-unit">{{ pressureUnitTo }}</p>
+          </div>
+
+          <div class="row">
+            <label>Input:</label>
+            <input type="number" v-model.number="pressureInput" @input="convertPressure()" />
+          </div>
+
+          <div class="row">
+            <label>Converted:</label>
+            <p class="converted-value" aria-live="polite">{{ pressureConverted }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAT A PAGE (Placeholder) -->
+    <div v-show="currentPage === 'CAT_A'" class="page-content">
+      <div class="page-header">
+        <button class="back-button" @click="goHome()">← Back to Home</button>
+        <h2>CAT A Performance</h2>
+      </div>
+      <div class="card">
+        <div class="coming-soon">
+          <div class="coming-soon-icon">🚧</div>
+          <h3>Coming Soon</h3>
+          <p>CAT A performance calculations are under development.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIMITATIONS PAGE (Placeholder) -->
+    <div v-show="currentPage === 'Limitations'" class="page-content">
+      <div class="page-header">
+        <button class="back-button" @click="goHome()">← Back to Home</button>
+        <h2>Operational Limitations</h2>
+      </div>
+      <div class="card">
+        <div class="coming-soon">
+          <div class="coming-soon-icon">📊</div>
+          <h3>Coming Soon</h3>
+          <p>Operational limitations reference is under development.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
