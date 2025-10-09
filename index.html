@@ -18,12 +18,10 @@
         <div class="logo-container">
           <img class="hero-img" src="139.jpeg" alt="AW139 helicopter" />
           <h1>Agusta Westland 139</h1>
-          <p class="subtitle">Professional flight operations tools and calculators</p>
         </div>
       </header>
 
       <div class="tool-grid">
-        <!-- Order required by user: Emergency, Checklists, Power, Limitations, CAT A, Converter -->
         <div class="tool-card" @click="navigateTo('Emergency')">
           <div class="tool-icon">🚨</div>
           <h3>Emergency Procedures</h3>
@@ -64,7 +62,7 @@
     <div v-show="currentPage === 'Power'" class="page-content">
       <div class="page-header">
         <button class="back-button" @click="goHome()">← Back to Home</button>
-        <h2>AW139 – Power Assurance</h2>
+        <h2>Power Assurance</h2>
       </div>
 
       <div class="stack-vertical">
