@@ -1,0 +1,7 @@
+
+/* Pressure Converter page tweaks */
+.converter-page .results-card .r-value { letter-spacing: .2px; }
+.converter-card { background: rgba(255,255,255,.96); border: 1px solid #e5e7eb; border-radius: 12px; padding: 16px; }
+.converter-grid { display: grid; gap: 14px; grid-template-columns: 1fr; }
+.converter-grid .row { align-items: center; }
+.converter-note { font-size: .9rem; color: #374151; opacity: .9; }

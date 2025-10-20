@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AW139 Checklists</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="checklists.css">
+</head>
+
+<body>
+  <div id="app" class="checklist-container">
+    <div v-if="currentPage === 'menu'" class="card">
+      <div id="menuHeader" class="checklist-header" style="margin-bottom:12px;">
+        <a class="btn btn-back" href="index.html">← Back to Home</a>
+        <h2 style="margin-top:8px;">Checklists</h2>
+      </div>
+      <template v-for="(checklist, id) in checklists" :key="id">
+        <div class="checklist-menu-item" :class="{ complete: isChecklistComplete(id) }" @click="openChecklist(id)">
+          <div class="menu-item-title">
+            <span v-if="isChecklistComplete(id)">✓</span>
+            <span v-else>○</span>
+            <span>{{ checklist.title }}</span>
+          </div>
+          <div class="menu-item-progress">
+            {{ getChecklistProgress(id).completed }} of {{ getChecklistProgress(id).total }} completed
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <div v-if="currentPage === 'view' && currentChecklistData">
+      <div class="checklist-header">
+        <div class="button-group">
+          <button class="btn btn-back" @click="backToMenu()">← Back</button>
+          <button class="btn btn-reset" @click="resetCurrentChecklist()">⟲ Reset</button>
+        </div>
+        <h2>{{ currentChecklistData.title }}</h2>
+        <div class="progress-sub">
+          {{ getChecklistProgress(currentChecklistId).completed }} of {{ getChecklistProgress(currentChecklistId).total
+          }} completed
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" :style="{ width: getProgressPercentage(currentChecklistId) + '%' }"></div>
+          <div v-if="inlineNotice && inlineNotice.index===index" class="inline-toast">{{ inlineNotice.text }}</div>
+        </div>
+      </div>
+
+      <div v-for="(item, index) in currentChecklistData.items" :key="index">
+        <div v-if="item.type === 'check'" class="checklist-item" :class="{ checked: isItemChecked(index) }"
+          @click="toggleItem(index)" :data-item="index">
+          <div class="check-circle"><span class="check-mark">✓</span></div>
+          <div class="item-number">{{ getCheckNumber(index) }}</div>
+          <div class="item-content">
+            <div class="item-text">{{ item.text }}</div>
+            <div class="item-action">{{ item.action }}</div>
+          </div>
+          <div v-if="inlineNotice && inlineNotice.index===index" class="inline-toast">{{ inlineNotice.text }}</div>
+        </div>
+
+        <div v-else-if="item.type === 'header'" class="header-box">{{ item.text }}</div>
+        <div v-else-if="item.type==='caution'" class="caution-box">
+          <div class="alert-label-row">⚠️ <strong>CAUTION</strong> ⚠️</div>
+          <div class="alert-body">{{ getAfterColon(item.text) }}</div>
+        </div>
+        <div v-else-if="item.type==='warning'" class="warning-box">
+          <div class="alert-label-row">‼️ <strong>WARNING</strong> ‼️</div>
+          <div class="alert-body">{{ getAfterColon(item.text) }}</div>
+        </div>
+      </div>
+
+      <div v-if="isChecklistComplete(currentChecklistId)" class="completion-badge">✓ Checklist Complete</div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="app.js"></script>
+  <script src="checklists.js"></script>
+</body>
+
+</html>

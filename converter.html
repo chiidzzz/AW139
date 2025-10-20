@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AW139 Pressure Converter</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="converter.css">
+</head>
+<body class="converter-page">
+  <div id="app" class="page-content">
+    <div class="page-header">
+      <a class="back-button" href="index.html">← Back to Home</a>
+      <h2>Pressure Converter</h2>
+    </div>
+
+    <div class="converter-card unit-converter">
+      <div class="converter-grid">
+        <div class="row">
+          <label for="inHg">Pressure (in. Hg)</label>
+          <input id="inHg" type="number" step="0.01" v-model.number="inHg" @input="fromInHg()" />
+        </div>
+        <div class="row">
+          <label for="hPa">Pressure (hPa / mbar)</label>
+          <input id="hPa" type="number" step="0.1" v-model.number="hPa" @input="fromHpa()" />
+        </div>
+        <hr class="divider" />
+        <div class="row">
+          <label>Standard sea‑level (ISA)</label>
+          <div class="converted-value">{{ fmt(standardInHg) }} inHg = {{ fmt(standardHpa) }} hPa</div>
+        </div>
+        <p class="converter-note">Tip: 1 inHg = 33.8638866667 hPa. Values round as you type.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="app.js"></script>
+  <script src="converter.js"></script>
+</body>
+</html>
