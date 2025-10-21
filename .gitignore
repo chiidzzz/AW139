@@ -1,6 +1,5 @@
-backup/
-Backup2/
-Backup3/
+Backup/
+Current/
 *.backup
 *.bak
 .DS_Store

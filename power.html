@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,10 +8,11 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="power.css">
 </head>
+
 <body class="power-page">
   <div id="app" class="page-content">
     <div class="page-header">
-      <a class="back-button" href="index.html">← Back to Home</a>
+      <a class="btn btn-back" href="index.html">← Back to Home</a>
       <h2>Power Assurance</h2>
     </div>
 
@@ -36,7 +38,8 @@
           </div>
           <div class="row">
             <label>Engine Torque (%):</label>
-            <input type="number" v-model.number="engineTorque" min="90" max="105" step="0.1" placeholder="-" @input="recalc()" />
+            <input type="number" v-model.number="engineTorque" min="90" max="105" step="0.1" placeholder="-"
+              @input="recalc()" />
           </div>
           <div v-if="inputError" class="error">{{ inputError }}</div>
         </div>
@@ -68,4 +71,5 @@
   <script src="app.js"></script>
   <script src="power.js"></script>
 </body>
+
 </html>

@@ -1,43 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AW139 Helicopter Tools</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <div class="home-page">
-    <header class="home-header">
-      <div class="logo-container">
-        <img class="hero-img" src="139.jpeg" alt="AW139 helicopter" />
-        <h1>Agusta Westland 139</h1>
-        <p class="subtitle">Quick access to tools & checklists</p>
+  <header class="home-header" style="background: none !important;">
+    <div class="hero-container">
+      <div class="hero-left">
+        <h1 class="hero-title">
+          <span class="title-line">AgustaWestland</span>
+          <span class="title-line main-model">AW139</span>
+        </h1>
       </div>
-    </header>
-
-    <div class="tool-grid">
-      <a class="tool-card" href="checklists.html">
-        <div class="tool-icon">✅</div>
-        <h3>Checklists</h3>
-      </a>
-
-      <a class="tool-card" href="power.html">
-        <div class="tool-icon">⚡</div>
-        <h3>Power Assurance</h3>
-      </a>
-
-      <!-- Future pages can be added here -->
-      <a class="tool-card" href="converter.html">
-        <div class="tool-icon">🧮</div>
-        <h3>Pressure Converter</h3>
-      </a>
     </div>
+    <div class="hero-right">
+      <div class="hero-img-container">
+        <div class="img-glow"></div>
+        <img class="hero-img" src="139.jpeg" alt="AW139 helicopter" />
+      </div>
+    </div>
+    </div>
+  </header>
 
-    <footer class="home-footer">AW139 Toolset</footer>
+  <div class="tool-grid">
+    <a class="tool-card" href="checklists.html">
+      <div class="tool-icon">✅</div>
+      <h3>Checklists</h3>
+    </a>
+
+    <a class="tool-card" id="power-card">
+      <div class="tool-icon">⚡</div>
+      <h3>Power Assurance</h3>
+    </a>
+
+    <!-- Future pages can be added here -->
+    <a class="tool-card" href="converter.html">
+      <div class="tool-icon">🧮</div>
+      <h3>Pressure Converter</h3>
+    </a>
+  </div>
   </div>
 
   <script src="https://unpkg.com/vue@3"></script>
   <script src="app.js"></script>
 </body>
+
 </html>
