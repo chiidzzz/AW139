@@ -1,7 +1,7 @@
 // ====== Embedded CHECKLISTS_DATA (moved from app.js) ======
 const CHECKLISTS_DATA = {
   "external-preflight": {
-    title: "EXTERNAL PRE-FLIGHT CHECKS",
+    title: "External Pre-Flight Checks",
     items: [
       // === Intro step with image and OK button ===
       {
@@ -314,7 +314,7 @@ const CHECKLISTS_DATA = {
   },
 
   "normal-start": {
-    title: "NORMAL ENGINE START",
+    title: "Normal Engine Start",
     items: [
       { type: "header", text: "COCKPIT / ENGINE PRE-START CHECKS" },
 
@@ -859,7 +859,7 @@ const CHECKLISTS_DATA = {
   },
 
   "quick-start": {
-    title: "QUICK ENGINE START",
+    title: "Quick Engine Start",
     items: [
       {
         type: "note",
@@ -1201,13 +1201,13 @@ const CHECKLISTS_DATA = {
       { type: "check", text: "ECL", action: "Confirm both set to FLIGHT." },
       {
         type: "check",
-        text: "TQ LIMiter pushbutton",
+        text: "TQ LIMITER pushbutton",
         action:
           "Push, if required, to enable TQ limiter function (LIMITER ON advisory message).",
       },
       {
         type: "caution",
-        text: "With TQ LIMiter enabled, the AEO engine total torque will be limited to a combined torque value of 228% TQ. OEI engine torque limit will remain at 160% TQ.",
+        text: "With TQ LIMITER enabled, the AEO engine total torque will be limited to a combined torque value of 228% TQ. OEI engine torque limit will remain at 160% TQ.",
       },
       { type: "check", text: "CAS", action: "Clear/as required." },
     ],
@@ -1296,6 +1296,328 @@ const CHECKLISTS_DATA = {
         type: "check",
         text: "Power",
         action: "Adjust as required for cruise flight or continued climb.",
+      },
+    ],
+  },
+  "in-flight": {
+    title: "In-Flight Procedures",
+    items: [
+      { type: "header", text: "AFTER TAKE-OFF" },
+      {
+        type: "check",
+        text: "Landing gear",
+        action: "Confirm UP.",
+      },
+      {
+        type: "check",
+        text: "LDG LT & LDG LT2 switches",
+        action: "Confirm OFF.",
+      },
+      {
+        type: "check",
+        text: "Engine parameters, temperatures and pressures",
+        action: "Normal – within limits.",
+      },
+      {
+        type: "check",
+        text: "LD-SH switch",
+        action: "As required (TORQUE or TEMP) – confirm parameters matched.",
+      },
+      {
+        type: "note",
+        text: "The LD-SH switch allows the pilot to maintain engine TORQUE or ITT matched, as required.",
+      },
+      { type: "check", text: "TQ LIMiter pushbutton", action: "As required." },
+      { type: "check", text: "CAS", action: "Clear/as required." },
+      {
+        type: "note",
+        text: "During flight below 1000 ft (300 m) AGL fly attentive.",
+      },
+      { type: "check", text: "MFD", action: "As required." },
+
+      { type: "header", text: "CLIMB CHECKS" },
+      { type: "check", text: "VENT", action: "As required." },
+      { type: "check", text: "Radios/Navigation", action: "As required." },
+      { type: "check", text: "Autopilot mode", action: "As required." },
+
+      { type: "header", text: "CRUISE CHECKS" },
+      {
+        type: "check",
+        text: "Collective",
+        action: "Adjust as necessary to keep engine parameters within limits.",
+      },
+      {
+        type: "check",
+        text: "LD-SH switch",
+        action: "As required (TORQUE or TEMP) – confirm parameters matched.",
+      },
+      {
+        type: "note",
+        text: "The LD-SH switch allows the pilot to maintain engine TORQUE or ITT matched, as required.",
+      },
+      {
+        type: "note",
+        text: "If the engines are ITT limited on the PI indicator, and there is a large ITT mismatch, PI matching can be restored by selecting LD-SH switch to TEMP.",
+      },
+      {
+        type: "check",
+        text: "FUEL",
+        action:
+          "Every 30 minutes: Check quantity, XFEED closed or as required.",
+      },
+      {
+        type: "note",
+        text: "If fuel consumption is greater than expected, see 'Abnormal Fuel Consumption' procedure (MALFUNCTION / FUEL page 76).",
+      },
+      { type: "check", text: "Airspeed", action: "Maintain within limits." },
+      {
+        type: "check",
+        text: "PITOT HEATER switches",
+        action: "ON for indicated OAT of +4°C or less.",
+      },
+      { type: "check", text: "Compass", action: "Check all synchronized." },
+      {
+        type: "check",
+        text: "Radios/Navigation",
+        action: "As required.",
+      },
+      {
+        type: "check",
+        text: "Standby instrument",
+        action: "Check airspeed, altimeter and artificial horizon against PFD.",
+      },
+      { type: "check", text: "Autopilot modes", action: "As required." },
+      {
+        type: "check",
+        text: "LDG LT & LDG LT2 switches",
+        action: "OFF, if used.",
+      },
+      {
+        type: "check",
+        text: "MFD",
+        action: `
+    <ol>
+      <li>Every flight hour: select <strong>PWR PLANT</strong> page and confirm no engine matching abnormalities.</li>
+      <li>Above 15,000 ft (4,560 m): monitor DC generator load.</li>
+    </ol>
+  `,
+      },
+    ],
+  },
+  "approach-landing": {
+    title: "Approach And Landing",
+    items: [
+      { type: "header", text: "PRE-LANDING CHECKS" },
+      { type: "check", text: "RPM switch", action: "Confirm 100%." },
+      { type: "check", text: "NR/NF", action: "Confirm 100%." },
+      { type: "check", text: "MFD", action: "Select PWR PLANT page." },
+      { type: "check", text: "TQ LIMiter pushbutton", action: "As required." },
+      {
+        type: "check",
+        text: "Landing gear lever",
+        action: "DOWN – Three green lights on LDG control panel.",
+      },
+      {
+        type: "note",
+        text: "For OAT of -30°C and below, undercarriage extension time may double.",
+      },
+      { type: "check", text: "NOSEWHEEL steering", action: "LOCK." },
+      {
+        type: "check",
+        text: "LDG LT & LDG LT2 switches",
+        action: "As required.",
+      },
+      {
+        type: "check",
+        text: "Temperatures and Pressures",
+        action: "Within limits.",
+      },
+      {
+        type: "check",
+        text: "Fuel",
+        action: "Quantity, XFEED closed unless required.",
+      },
+      { type: "check", text: "RAD ALT bug", action: "As required." },
+      {
+        type: "check",
+        text: "Altimeters",
+        action: "Pilot, Standby, Copilot – Set.",
+      },
+      { type: "check", text: "PARK BRAKE handle", action: "As required." },
+      { type: "check", text: "Cabin", action: "Secure." },
+      { type: "check", text: "PITOT HEATER", action: "As required." },
+      {
+        type: "note",
+        text: `
+    If an ILS approach is required, select both NAVs to the same frequency. 
+    On ESIS select NAV ON and set the course to the final ILS course.<br><br>
+    <strong>Recommended airspeeds:</strong>
+    <ol>
+      <li>Glideslopes up to 4° → 120 KIAS</li>
+      <li>Glideslopes between 4° and 7.5° → 100 KIAS</li>
+    </ol>
+  `,
+      },
+
+      {
+        type: "note",
+        text: "When descending below 150 ft AGL, the vocal message ‘ONE FIFTY FEET’ is activated regardless of gear status. This message is suppressed if AWG switch is set to REGRADE or INHIBIT.",
+      },
+      { type: "header", text: "LANDING (CATEGORY B)" },
+      { type: "check", text: "AWG switch", action: "NORMAL." },
+      {
+        type: "check",
+        text: "Landing direction",
+        action: "Orient for approach into prevailing wind if possible.",
+      },
+      {
+        type: "check",
+        text: "Initial point",
+        action: `
+    <ol>
+      <li>Approach smoothly, reducing airspeed gradually.</li>
+      <li>Arrive 200 ft AGL above the touchdown point with ≤500 fpm rate of descent.</li>
+      <li>Initiate a deceleration to achieve 30 KIAS at 50 ft.</li>
+      <li>At 50 ft rotate nose up to approximately 20° to decelerate.</li>
+    </ol>
+  `,
+      },
+
+      {
+        type: "check",
+        text: "Landing",
+        action: "Continue to decelerate and descend to hover.",
+      },
+      {
+        type: "check",
+        text: "MFD PWR PLANT page",
+        action: `
+    <ol>
+      <li>While in hover, check all parameters within normal operating limits.</li>
+      <li>Confirm there are no engine matching abnormalities.</li>
+    </ol>
+  `,
+      },
+
+      {
+        type: "check",
+        text: "Touch down",
+        action:
+          "Max nose-up attitude 15° at touchdown. Apply wheel brakes as required.",
+      },
+      {
+        type: "check",
+        text: "NOSE WHEEL lock",
+        action: "UNLK if ground taxiing required.",
+      },
+    ],
+  },
+  "post-landing": {
+    title: "Post Landing And Shutdown",
+    items: [
+      { type: "header", text: "POST LANDING CHECKS" },
+      { type: "check", text: "AFCS", action: "As required." },
+      {
+        type: "check",
+        text: "LDG LT & LDG LT2 switches",
+        action: "OFF (if used).",
+      },
+      { type: "check", text: "Position lights", action: "OFF (if used)." },
+
+      { type: "header", text: "PRE-SHUTDOWN CHECKS" },
+      {
+        type: "check",
+        text: "PARK BRAKE handle",
+        action: `
+        <ol>
+          <li>Pull and turn handle – PARK BRK PRESS caution illuminates.</li>
+          <li>Press pedals until caution extinguishes and PARK BRK ON advisory illuminates.</li>
+        </ol>
+      `,
+      },
+      {
+        type: "check",
+        text: "NOSE WHEEL",
+        action: "Push to LOCK, if required.",
+      },
+      { type: "check", text: "Collective lever", action: "Set to MPOG." },
+      {
+        type: "check",
+        text: "Cyclic stick",
+        action: "Centralized (verify on PFD cyclic indicator).",
+      },
+      { type: "check", text: "Pedals", action: "Centered." },
+      { type: "check", text: "AFCS", action: "Confirm disengaged." },
+      { type: "check", text: "Avionics", action: "As required." },
+      {
+        type: "check",
+        text: "PITOT HEATER switches",
+        action: "OFF (if used).",
+      },
+      {
+        type: "check",
+        text: "External Power",
+        action: "If required, carry out EXTERNAL POWER connection procedure.",
+      },
+
+      { type: "header", text: "ENGINES AND ROTOR SHUTDOWN" },
+      {
+        type: "check",
+        text: "ENG 1 and 2 MODE switches",
+        action: "Set to IDLE.",
+      },
+      {
+        type: "note",
+        text: "A period of 120 seconds stabilization at IDLE is recommended.",
+      },
+      {
+        type: "check",
+        text: "BUS TIE switch",
+        action: "ON (for night operations).",
+      },
+      { type: "check", text: "Fuel PUMP 1 and 2 switches", action: "OFF." },
+      { type: "check", text: "ENG 1 and 2 MODE switches", action: "OFF." },
+      {
+        type: "caution",
+        text: `
+        During shutdown, note that NG speed decelerates freely without abnormal noise or rapid rundown. ITT does not rise abnormally.
+      `,
+      },
+      {
+        type: "check",
+        text: "ENG 1 and 2 FUEL valves",
+        action:
+          "OFF – Confirm 1 & 2 FUEL PUMP cautions displayed (fuel valve indicator bar horizontal).",
+      },
+      {
+        type: "check",
+        text: "Fuel XFEED switch",
+        action: "CLOSED (indicator bar vertical).",
+      },
+      { type: "check", text: "Cockpit lights", action: "OFF." },
+      { type: "check", text: "ANTI-COLL lights", action: "OFF." },
+      { type: "check", text: "BUS TIE switch", action: "Confirm AUTO." },
+      {
+        type: "caution",
+        text: "Prior to switching electrical power OFF, ensure engine NG values are at 0%.",
+      },
+      {
+        type: "check",
+        text: "BATTERY MASTER and GENERATORS",
+        action: "OFF.",
+      },
+      { type: "check", text: "BATTERY MAIN and AUX", action: "OFF." },
+
+      { type: "header", text: "POST SHUTDOWN CHECKS" },
+      {
+        type: "info",
+        text: `
+        <ul>
+          <li>If parked for more than 1 hour, chock the wheels.</li>
+          <li>If on sloping ground, chock the wheels immediately.</li>
+          <li>If OAT ≤ -20°C and aircraft remains outside, remove Main and Auxiliary batteries and store in a heated room.</li>
+        </ul>
+      `,
       },
     ],
   },

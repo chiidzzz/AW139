@@ -96,7 +96,7 @@
         </div>
         <div v-else-if="item.type === 'note'" class="note-box">
           <div class="note-icon">🛈</div>
-          <div class="note-text"><strong>Note:</strong> {{ item.text }}</div>
+          <div class="note-text"><strong>Note: </strong><span v-html="item.text"></span></div>
         </div>
         <div v-else-if="item.type === 'subcheck'" class="subcheck-item">
           <input type="checkbox" />

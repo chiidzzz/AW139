@@ -50,3 +50,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// ===============================
+// About Modal (App Info & Version)
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  const aboutBtn = document.getElementById("about-btn");
+  if (!aboutBtn) return;
+
+  aboutBtn.addEventListener("click", () => {
+    const overlay = document.createElement("div");
+    overlay.className = "modal-overlay";
+
+    const box = document.createElement("div");
+    box.className = "modal-box";
+    box.innerHTML = `
+  <div>
+    <p style="text-align: left !important;"><strong>Version:</strong> 1.0.0</p>
+    <p style="text-align: left !important;"><strong>Data Reference:</strong></p>
+    <ul style="list-style-type: disc; margin-left: 1.8rem; text-align: left !important;">
+      <li>Quick Reference Handbook Rev.26</li>
+      <li>Rotorcraft Flight Manual Rev.26 dated 2 July 2025</li>
+    </ul>
+    <div class="modal-actions" style="text-align: center; margin-top: 20px;">
+      <button class="modal-ok" type="button">Close</button>
+    </div>
+  </div>
+`;
+
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+
+    // Close logic
+    box
+      .querySelector(".modal-ok")
+      .addEventListener("click", () => overlay.remove());
+    overlay.addEventListener("click", (ev) => {
+      if (ev.target === overlay) overlay.remove();
+    });
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape") overlay.remove();
+    });
+  });
+});
