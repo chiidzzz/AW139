@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AW139 Emergencies</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checklists.css">
+    <link rel="stylesheet" href="emergencies.css">
+</head>
+
+<body class="emergency-page">
+    <div id="app" class="page-content">
+        <div class="page-header">
+            <a class="btn btn-back" href="index.html">← Back to Home</a>
+            <h2>Emergency Procedures</h2>
+        </div>
+
+        <div class="search-section">
+            <div class="search-wrapper">
+                <input type="text" v-model="query" placeholder="Search emergency procedure..." class="search-box" />
+                <button v-if="query" class="clear-btn" @click="query = ''; selected = null;">✕</button>
+            </div>
+
+            <ul v-if="query && filtered.length" class="suggestions">
+                <li v-for="item in filtered" @click="select(item)">{{ item.title }}</li>
+            </ul>
+
+            <p v-if="query && !filtered.length" class="no-results">No results found.</p>
+        </div>
+
+        <div v-if="selected" class="emergency-details">
+            <div v-for="(step, index) in selected.items" :key="index">
+
+                <!-- Header -->
+                <div v-if="step.type === 'header'" class="header-box">{{ step.text }}</div>
+
+                <!-- Flow Box -->
+                <div v-else-if="step.type === 'flow-box'" class="flow-box"
+                    :class="{ highlight: step.highlight, alert: step.alert, caution: step.caution }">
+                    <div class="flow-text" v-html="step.text"></div>
+                    <div v-if="step.subtext" class="flow-subtext" v-html="step.subtext"></div>
+                </div>
+
+                <!-- Flow Box w/ Side Notes -->
+                <div v-else-if="step.type === 'flow-box-with-note'" class="flow-with-notes">
+                    <div class="flow-box"
+                        :class="{ highlight: step.highlight, alert: step.alert, caution: step.caution }">
+                        <div class="flow-text">{{ step.text }}</div>
+                    </div>
+                    <div v-if="step.rightNote" class="flow-note flow-note-right">{{ step.rightNote }}</div>
+                    <div v-if="step.bottomNote" class="flow-note flow-note-bottom">{{ step.bottomNote }}</div>
+                </div>
+
+                <!-- Arrow -->
+                <div v-else-if="step.type === 'flow-arrow'" class="flow-arrow">↓</div>
+
+                <!-- Dual -->
+                <div v-else-if="step.type === 'flow-dual'" class="flow-dual">
+                    <div class="flow-dual-item">
+                        <div class="flow-text">{{ step.left.text }}</div>
+                        <div class="flow-detail" v-html="step.left.detail"></div>
+                    </div>
+                    <div class="flow-dual-item">
+                        <div class="flow-text">{{ step.right.text }}</div>
+                        <div class="flow-detail" v-html="step.right.detail"></div>
+                    </div>
+                </div>
+
+                <!-- Check Item -->
+                <div v-else-if="step.type === 'check'" class="checklist-item">
+                    <div class="item-text">{{ step.text }}</div>
+                    <div class="item-action" v-html="step.action"></div>
+                </div>
+
+                <!-- WARNING -->
+                <div v-else-if="step.type === 'warning'" class="warning-box">
+                    ⛔ WARNING ⛔:<br />{{ step.text }}
+                </div>
+
+                <!-- CAUTION -->
+                <div v-else-if="step.type === 'caution'" class="caution-box">
+                    ⚠️ CAUTION ⚠️:<br />{{ step.text }}
+                </div>
+
+                <!-- Plain Text -->
+                <div v-else-if="step.type === 'plain'" class="plain-line">
+                    {{ step.text }}
+                </div>
+
+                <!-- NEW: Bold Line (no box) -->
+                <div v-else-if="step.type === 'bold'" class="bold-line">
+                    <strong>{{ step.text }}</strong>
+                </div>
+
+                <!-- Numbered Action -->
+                <div v-else-if="step.type === 'action'" class="action-line" v-html="step.text"></div>
+
+                <!-- Note Box -->
+                <div v-else-if="step.type === 'note'" class="note-box">
+                    <div class="note-icon">🛈</div>
+                    <div class="note-text"><strong>Note:</strong> {{ step.text }}</div>
+                </div>
+
+                <!-- Info Box -->
+                <div v-else-if="step.type === 'info'" class="info-box">
+                    <span v-html="step.text"></span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="emergencies.js"></script>
+</body>
+
+</html>
