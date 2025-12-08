@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     box.querySelector(".modal-ok").addEventListener("click", () => {
       overlay.remove();
-      window.location.href = "power.html";
+      window.location.href = "power/power.html";
     });
 
     overlay.addEventListener("click", (ev) => {

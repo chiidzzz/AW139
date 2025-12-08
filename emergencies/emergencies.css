@@ -77,7 +77,7 @@
   background: rgba(0, 0, 0, 0.15); /* subtle circle background */
   border: none;
 
-  color: #fff; /* white icon */
+  color: black;
   font-size: 1.1rem; /* larger X */
   font-weight: 900; /* bold X */
 
@@ -262,15 +262,51 @@
   gap: 16px;
   margin: 8px auto;
   max-width: 600px;
+  position: relative;
 }
 
 .flow-dual-item {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   border: 2px solid #3b82f6;
   border-radius: 8px;
-  padding: 12px;
+  padding: 8px;
   text-align: center;
   box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+  font-size: 0.9rem;
+}
+
+.flow-dual::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(0, 0, 0, 0.25); /* subtle gray divider */
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+/* Align a dual box under the right column only */
+.flow-dual.align-right,
+.flow-dual[alignRight="true"] {
+  max-width: 300px; /* half width */
+  margin-left: auto; /* push to the right */
+  margin-right: 0;
+}
+
+/* Right-aligned dual branch (used for second split in ENG BAY FIRE (FLIGHT)) */
+.flow-dual-right {
+  margin-left: auto; /* push whole dual block to the right */
+  margin-right: 0;
+}
+
+/* On mobile, re-center it so the flow is clean vertically */
+@media (max-width: 640px) {
+  .flow-dual-right {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
 /* Flow box with annotation notes */
@@ -307,8 +343,8 @@
 
 @media (max-width: 640px) {
   .flow-dual {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px; /* slightly smaller gap for narrow screens */
   }
 
   .flow-note-right,
@@ -409,7 +445,12 @@
 
 /* Inline text matching alert (red) color */
 .text-alert {
-  color: #dc2626; /* same red as .flow-box.alert border */
+  color: white; /* same red as .flow-box.alert border */
+  font-weight: 900;
+}
+
+.text-alert-red {
+  color: red; /* same red as .flow-box.alert border */
   font-weight: 900;
 }
 
@@ -417,4 +458,325 @@
 .text-caution {
   color: #d97706; /* same orange as .flow-box.caution border */
   font-weight: 900;
+}
+
+.right-only {
+  margin-left: auto;
+  margin-right: 0;
+  max-width: 48%; /* aligns perfectly under right dual box */
+}
+
+/* Dual boxes that should appear only on the right side */
+.flow-dual[data-right-only="true"],
+.flow-dual.right-only-dual {
+  max-width: 50%;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+@media (max-width: 640px) {
+  .flow-dual[data-right-only="true"],
+  .flow-dual.right-only-dual {
+    max-width: 50%;
+  }
+}
+
+/* Nested dual inside flow-detail (for ENGINE BAY FIRE nested split) */
+.flow-detail .flow-dual.nested {
+  margin-top: 12px;
+  max-width: 100%;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.flow-detail .flow-dual.nested .flow-dual-item {
+  padding: 8px;
+  font-size: 0.85rem;
+}
+
+.flow-detail .flow-dual.nested::after {
+  display: none; /* remove center divider line in nested duals */
+}
+
+@media (max-width: 640px) {
+  .flow-detail .flow-dual.nested {
+    margin-top: 10px;
+    gap: 6px;
+    max-width: 100%;
+  }
+
+  .flow-detail .flow-dual.nested .flow-dual-item {
+    padding: 6px;
+    font-size: 0.8rem;
+  }
+}
+/* =======================================================
+   INTERACTIVE MODE – CLEAN RESPONSIVE TRAINING UI
+   ======================================================= */
+
+/* Container */
+.interactive-mode {
+  margin-top: 10px;
+  padding-top: 10px !important;
+}
+
+/* Back Button */
+.btn-back-step {
+  background: #374151;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: 0.2s;
+}
+.btn-back-step:hover {
+  background: #1f2937;
+}
+
+/* Alert Banner */
+.alert-banner {
+  background: #dc2626;
+  padding: 12px 18px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+/* Choice Question Box */
+.question-box {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #000;
+  margin: 10px 0 14px 0;
+  text-align: center;
+}
+
+/* Choice Buttons */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.choice-btn {
+  background: #1d4ed8;
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+.choice-btn:hover {
+  background: #1e40af;
+}
+.choice-btn:active {
+  transform: scale(0.97);
+}
+
+/* ACTION BOX */
+.action-container {
+  text-align: center;
+}
+
+.action-box {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 15px;
+  border: 2px solid #cbd5e1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+.action-box.highlight {
+  border-color: #f59e0b;
+  background: #fff7e6;
+}
+.action-box.critical {
+  border-color: #dc2626;
+  background: #fee2e2;
+}
+
+.action-icon {
+  font-size: 1.4rem;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.action-text {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Additional Action */
+.additional-action {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+/* Continue Button */
+.btn-continue {
+  background: #16a34a;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.btn-continue:hover {
+  background: #15803d;
+}
+
+/* MULTIPLE ACTIONS */
+.actions-container {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #cbd5e1;
+  margin-bottom: 15px;
+}
+
+.actions-title {
+  font-weight: 800;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.action-item {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.action-number {
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.action-item .action-text {
+  font-size: 0.98rem;
+}
+
+/* COMPLETE */
+.complete-container {
+  text-align: center;
+  background: #e0fce0;
+  padding: 22px;
+  border-radius: 12px;
+  border: 2px solid #16a34a;
+}
+
+.complete-icon {
+  font-size: 2rem;
+  color: #16a34a;
+  margin-bottom: 10px;
+}
+
+.complete-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #14532d;
+  margin-bottom: 16px;
+}
+
+.btn-restart {
+  background: #1d4ed8;
+  border: none;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+.btn-restart:hover {
+  background: #1e40af;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .choice-btn,
+  .btn-continue {
+    font-size: 1rem;
+    padding: 14px;
+  }
+  .action-box {
+    flex-direction: column;
+    text-align: center;
+  }
+  .action-icon {
+    margin-bottom: 6px;
+  }
+}
+
+.inline-complete {
+  margin-top: 18px;
+  padding: 12px 14px 12px 50px; /* extra left padding for the checkmark */
+
+  background: #f0fdf4; /* soft green background */
+  color: #166534; /* dark green text */
+
+  border-left: 6px solid #16a34a; /* thick green strip */
+  border: 2px solid #bbf7d0; /* softer outer border */
+
+  border-radius: 8px;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  position: relative; /* allow checkmark positioning */
+}
+
+/* Thick green tick */
+.inline-complete::before {
+  content: "✓";
+  font-size: 1.8rem; /* thick large tick */
+  font-weight: 900;
+  color: #16a34a; /* strong green */
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.action-clickable {
+  cursor: pointer;
+  color: #005fcc;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.plain-line {
+  margin: 8px 0;
+  font-size: 15px;
+  color: #333;
+  line-height: 1.4;
 }

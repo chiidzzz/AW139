@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>AW139 Checklists</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../styles.css">
   <link rel="stylesheet" href="checklists.css">
 </head>
 
@@ -14,7 +14,7 @@
     <!-- MENU PAGE -->
     <div v-if="currentPage === 'menu'" class="card">
       <div id="menuHeader" class="page-header">
-        <a class="btn btn-back" href="index.html">← Back to Home</a>
+        <a class="btn btn-back" href="../index.html">← Back to Home</a>
         <h2>Checklists</h2>
       </div>
       <template v-for="(checklist, id) in checklists" :key="id">
@@ -114,7 +114,7 @@
   </div>
 
   <script src="https://unpkg.com/vue@3"></script>
-  <script src="app.js"></script>
+  <script src="../app.js"></script>
   <script src="checklists.js"></script>
 </body>
 

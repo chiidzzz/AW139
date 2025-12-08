@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AW139 Emergencies</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="../checklists/checklists.css">
+    <link rel="stylesheet" href="emergencies.css">
+</head>
+
+<body class="emergency-page">
+
+    <!-- ====================================================== -->
+    <!-- ======================= VUE APP ======================= -->
+    <!-- ====================================================== -->
+    <div id="app" class="page-content">
+
+        <div class="page-header">
+            <a class="btn btn-back" href="../index.html">← Back to Home</a>
+            <h2>Emergency Procedures</h2>
+        </div>
+
+        <!-- ===================== SEARCH ===================== -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <input type="text" v-model="query" placeholder="Search emergency procedure..." class="search-box" />
+                <button v-if="query" class="clear-btn" @click="query = ''; selected = null;">✕</button>
+            </div>
+
+            <ul v-if="query && filtered.length" class="suggestions">
+                <li v-for="item in filtered" @click="select(item)">
+                    {{ item.title }}
+                </li>
+            </ul>
+
+            <p v-if="query && !filtered.length" class="no-results">No results found.</p>
+        </div>
+
+        <!-- ================= SELECTED EMERGENCY ================= -->
+        <div v-if="selected" class="emergency-details">
+
+            <!-- ========================================================== -->
+            <!-- ======================= INTERACTIVE ====================== -->
+            <!-- ========================================================== -->
+            <div v-if="isInteractive && currentStepData" class="interactive-mode">
+
+                <!-- BACK BUTTON -->
+                <button v-if="history.length > 0" @click="goBack" class="btn-back-step">← Back</button>
+
+                <!-- WARNING HEADER -->
+                <div v-if="currentStepData.alert && currentStepData.warningText"
+                    class="flow-with-notes interactive-warning">
+                    <div class="flow-box alert">
+                        <div class="flow-text">
+                            <span class="text-alert">{{ currentStepData.warningText }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flow-note flow-note-right">+ Voice Warning</div>
+                </div>
+
+                <!-- CHOICE PAGE -->
+                <div v-if="currentStepData.type === 'choice'" class="choice-container">
+                    <div class="question-text">{{ currentStepData.question }}</div>
+                    <div class="choices">
+                        <button v-for="choice in currentStepData.choices" :key="choice.next"
+                            @click="chooseOption(choice.next)" class="choice-btn">
+                            {{ choice.text }}
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ACTION + QUESTION -->
+                <div v-else-if="currentStepData.type === 'action-question'" class="action-container">
+
+                    <div class="action-box">
+                        <div class="action-text" v-html="currentStepData.action"></div>
+                    </div>
+
+                    <div class="question-text">{{ currentStepData.question }}</div>
+
+                    <div class="choices">
+                        <button v-for="choice in currentStepData.choices" :key="choice.next"
+                            @click="chooseOption(choice.next)" class="choice-btn">
+                            {{ choice.text }}
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- SINGLE ACTION -->
+                <div v-else-if="currentStepData.type === 'action'" class="action-container">
+
+                    <div class="action-box" :class="{ 'critical': currentStepData.critical,
+                                   'highlight': currentStepData.highlight }">
+
+                        <div class="action-text" v-html="currentStepData.text"></div>
+
+                    </div>
+
+                    <div v-if="currentStepData.additionalAction" class="additional-action">
+                        {{ currentStepData.additionalAction }}
+                    </div>
+
+                    <div v-if="currentStepData.next === 'complete'" class="inline-complete">
+                        <strong>Procedure Complete</strong>
+                    </div>
+
+                    <button v-else @click="chooseOption(currentStepData.next)" class="btn-continue">
+                        {{ currentStepData.buttonLabel || 'Continue →' }}
+                    </button>
+
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ======================= ACTIONS LIST ===================== -->
+                <!-- ========================================================== -->
+                <div v-else-if="currentStepData.type === 'actions'" class="actions-container">
+
+                    <div v-for="(item, idx) in currentStepData.actions" :key="idx" class="action-item">
+
+                        <!-- OBJECT TYPES -->
+                        <template v-if="typeof item === 'object'">
+
+                            <!-- FLOW BOX WITH NOTE -->
+                            <div v-if="item.type === 'flow-box-with-note'" class="flow-with-notes">
+
+                                <div class="flow-box" :class="{ alert: item.alert,
+                                               caution: item.caution }">
+                                    <div class="flow-text" v-html="item.text"></div>
+                                </div>
+
+                                <div v-if="item.rightNote" class="flow-note flow-note-right">
+                                    {{ item.rightNote }}
+                                </div>
+
+                                <div v-if="item.bottomNote" class="flow-note flow-note-bottom">
+                                    {{ item.bottomNote }}
+                                </div>
+
+                            </div>
+
+                            <!-- INLINE QUESTION -->
+                            <div v-else-if="item.type === 'question'" class="inline-question">
+
+                                <div class="question-text">{{ item.text }}</div>
+
+                                <div class="choices">
+                                    <button v-for="choice in item.choices" :key="choice.next"
+                                        @click="chooseOption(choice.next)" class="choice-btn">
+                                        {{ choice.text }}
+                                    </button>
+                                </div>
+
+                            </div>
+
+                            <!-- WARNINGS -->
+                            <div v-else-if="item.type === 'warning'" class="warning-box">
+                                ⛔ WARNING ⛔:<br />{{ item.text }}
+                            </div>
+
+                            <!-- CAUTIONS -->
+                            <div v-else-if="item.type === 'caution'" class="caution-box">
+                                ⚠️ CAUTION ⚠️:<br />{{ item.text }}
+                            </div>
+
+                            <!-- NOTES -->
+                            <div v-else-if="item.type === 'note'" class="note-box">
+                                <div class="note-icon">🛈</div>
+                                <div class="note-text">
+                                    <strong>Note:</strong> {{ item.text }}
+                                </div>
+                            </div>
+
+                            <!-- INFO -->
+                            <div v-else-if="item.type === 'info'" class="info-box">
+                                <span v-html="item.text"></span>
+                            </div>
+
+                        </template>
+
+                        <!-- STRING TYPES -->
+                        <template v-else-if="typeof item === 'string'">
+
+                            <!-- SECTION TITLE -->
+                            <span v-if="item.trim().startsWith('::')" class="action-text"
+                                v-html="item.replace('::', '')"></span>
+
+                            <!-- NUMBERED ACTION -->
+                            <span v-else>
+                                <span v-if="getActionNumber(currentStepData.actions, idx)" class="action-number">
+                                    {{ getActionNumber(currentStepData.actions, idx) }}.
+                                </span>
+
+                                <span class="action-text" v-html="item"></span>
+                            </span>
+
+                        </template>
+
+                        <!-- SAFETY FALLBACK -->
+                        <template v-else></template>
+
+                    </div>
+
+                    <!-- SMART CONTINUE / CUSTOM BUTTON -->
+                    <button v-if="
+                        !currentStepData.actions.some(a => a && a.type === 'question')
+                        && currentStepData.next !== 'complete'
+                        && !currentStepData.buttonLabel
+                    " @click="chooseOption(currentStepData.next)" class="btn-continue">
+                        Continue →
+                    </button>
+
+                    <!-- CUSTOM BUTTON (set per emergency) -->
+                    <button v-if="currentStepData.buttonLabel" @click="chooseOption(currentStepData.next)"
+                        class="btn-continue">
+                        {{ currentStepData.buttonLabel }}
+                    </button>
+
+                    <!-- COMPLETION MESSAGE -->
+                    <div v-if="currentStepData.next === 'complete'" class="inline-complete">
+                        <strong>Procedure Complete</strong>
+                    </div>
+
+                </div>
+
+            </div> <!-- END INTERACTIVE MODE -->
+
+            <!-- ========================================================== -->
+            <!-- ========================= STATIC MODE ==================== -->
+            <!-- ========================================================== -->
+
+            <div v-else class="static-mode">
+
+                <div v-for="(step, index) in selected.items" :key="index">
+
+                    <!-- HEADER -->
+                    <div v-if="step.type === 'header'" class="header-box">
+                        {{ step.text }}
+                    </div>
+
+                    <!-- PLAIN -->
+                    <div v-else-if="step.type === 'plain'" class="plain-line">
+                        {{ step.text }}
+                    </div>
+
+                    <!-- FLOW BOX -->
+                    <div v-else-if="step.type === 'flow-box'" class="flow-box" :class="[{ highlight: step.highlight, alert: step.alert, caution: step.caution },
+                                  step.rightOnly ? 'right-only' : '']">
+
+                        <div class="flow-text" v-html="step.text"></div>
+                        <div v-if="step.subtext" class="flow-subtext" v-html="step.subtext"></div>
+                    </div>
+
+                    <!-- FLOW WITH NOTE -->
+                    <div v-else-if="step.type === 'flow-box-with-note'" class="flow-with-notes">
+
+                        <div class="flow-box"
+                            :class="{ highlight: step.highlight, alert: step.alert, caution: step.caution }">
+                            <div class="flow-text" v-html="step.text"></div>
+                        </div>
+
+                        <div v-if="step.rightNote" class="flow-note flow-note-right">
+                            {{ step.rightNote }}
+                        </div>
+
+                        <div v-if="step.bottomNote" class="flow-note flow-note-bottom">
+                            {{ step.bottomNote }}
+                        </div>
+                    </div>
+
+                    <!-- WARNING -->
+                    <div v-else-if="step.type === 'warning'" class="warning-box">
+                        ⛔ WARNING ⛔:<br />{{ step.text }}
+                    </div>
+
+                    <!-- CAUTION -->
+                    <div v-else-if="step.type === 'caution'" class="caution-box">
+                        ⚠️ CAUTION ⚠️:<br />{{ step.text }}
+                    </div>
+
+                    <!-- ACTION -->
+                    <div v-else-if="step.type === 'action'" class="action-line"
+                        :class="{ 'action-clickable': step.text.includes('__open:') }"
+                        @click="step.text.includes('__open:') && handleAction(step.text)"
+                        v-html="formatAction(step.text)">
+                    </div>
+
+                    <!-- NOTE -->
+                    <div v-else-if="step.type === 'note'" class="note-box">
+                        <div class="note-icon">🛈</div>
+                        <div class="note-text">
+                            <strong>Note:</strong> {{ step.text }}
+                        </div>
+                    </div>
+
+                    <!-- INFO -->
+                    <div v-else-if="step.type === 'info'" class="info-box">
+                        <span v-html="step.text"></span>
+                    </div>
+
+                </div>
+
+            </div> <!-- END STATIC -->
+
+        </div>
+
+    </div> <!-- END OF APP -->
+
+    <!-- =================== SCRIPTS (NOW OUTSIDE APP) =================== -->
+    <script src="https://unpkg.com/vue@3"></script>
+    <script type="module" src="emergencies.js"></script>
+
+</body>
+
+</html>

@@ -6,7 +6,7 @@ const CHECKLISTS_DATA = {
       // === Intro step with image and OK button ===
       {
         type: "intro-image",
-        src: "preflight-sequence.jpg",
+        src: "../assets/images/preflight-sequence.jpg",
       },
 
       // === Area 1 – Helicopter Nose ===
